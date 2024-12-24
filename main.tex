@@ -39,9 +39,9 @@ This research article, recognizing the exponentially-increasing power requiremen
 
 \section{Introduction} \label{introduction}
 
-\cite{aima2021} classifies the task of \textit{Artificial Intelligence} (AI) to ``build intelligent entities,'' emphasizing its ``truly universal field.'' \textit{Machine Learning} (ML), a subset of AI, leveraged by the power of \textit{Deep Learning} (DL), has seen astounding recent increases in influence, advancements, and general reach to the end consumers. Although current \textit{algorithms} and \textit{architectures} that of \textit{chatbots} or \textit{classification models}, when boiled down to their fundamentals, are not very different from that of past years, they have a giant distinction in how they are perceived and utilized by consumers. Take the \textit{Transformer} Architecture that powers modern chatbots: it was already 5 years old when first made available to the general public through \textit{ChatGPT} \cite{attention2017, chatgpt2022}.
+\cite[p. 1]{aima2021} classifies the task of \textit{Artificial Intelligence} (AI) to ``build intelligent entities,'' emphasizing its ``truly universal field.'' \textit{Machine Learning} (ML), a subset of AI, leveraged by the power of \textit{Deep Learning} (DL), has seen astounding recent increases in influence, advancements, and general reach to the end consumers. Although current \textit{algorithms} and \textit{architectures} that of \textit{chatbots} or \textit{classification models}, when boiled down to their fundamentals, are not very different from that of past years, they have a giant distinction in how they are perceived and utilized by consumers. Take the \textit{Transformer} Architecture that powers modern chatbots: it was already 5 years old when first made available to the general public through \textit{ChatGPT} \cite{attention2017, chatgpt2022}.
 
-\textit{Optical Character Recognition} (OCR) \cite{dtic1978}, which falls on the umbrella \textit{Computer Vision} (CV) field, widely utilized to convert images of car plates, printed numbers, or text into characters computers can interpret, has seen its first idealizations in the early 20th century (take Goldberg's 1927 \textit{Statistical Machine} \cite{goldberg1927}), with formal modern idealizations emerging later that same century \cite{hough1962, hough1962_patent}, streamlined by the widespread use of computers, digitalization of information, and implementations of new algorithms \cite{cnn1989, tesseract2006}. It becomes no doubt that, despite time passing by, advancements of ML, aiming to make computers as smart as possible \cite{aima2021}, are not a new technology per se, but rather ideas that are present in the idealizations of automation, intrinsic to human consciousness \cite{kahneman2011}.
+\textit{Optical Character Recognition} (OCR) \cite{dtic1978}, which falls on the umbrella \textit{Computer Vision} (CV) field, widely utilized to convert images of car plates, printed numbers, or text into characters computers can interpret, has seen its first idealizations in the early 20th century (take Goldberg's 1927 \textit{Statistical Machine} \cite{goldberg1927}), with formal modern idealizations emerging later that same century \cite{hough1962, hough1962_patent}, streamlined by the widespread use of computers, digitalization of information, and implementations of new algorithms \cite{cnn1989, tesseract2006}. It becomes no doubt that, despite time passing by, advancements of ML, aiming to make computers as smart as possible \cite{aima2021}, are not a new technology per se, but rather ideas that are present in the idealizations of automation (offloading tasks), intrinsic to human consciousness \cite{kahneman2011}.
 
 This paper, henceforth, aims to analyze more efficient and accurate image-classification approaches in congruence with the recent astounding increase in energetical needs for training and running high-dimensional parameter spaces that of, but not limited to, \textit{Large Language Models} (LLMs) and \textit{Vision Transformers} (ViTs).
 
@@ -52,9 +52,9 @@ A \textit{neural network} (NN) takes an input in the form of a \textit{feature v
     \text{input} \to \boxed{\text{NN} } \to \text{output}
 \end{equation}
 
-The first step to understand how models succeed (or fail) to learn is to think of ML models the same way as we think of teaching others: we may not be aware of how they are reaching a conclusion, yet if they consistently reach one, it may be assumed their process is consistently reaching appropriate results (hence a low error or mistake rate). If students, however, consistently gets good grades in Test A, yet gets a statistically significant lower grade in Test B of the same content, it may be inferred that the student has not learned the actual content of the test, but rather its non-generalizable structure---this is called \textit{overfitting} in ML \cite{overfitting2004}. The notion of a student learning will henceforth be used, given the analogy's robustness and ability to capture well all the necessary concepts to be outlined in this paper. Training a ML algorithm, therefore, boils down to adapting teaching methods in order to conform to the best way students (models) learn.
+The first step to understand how models succeed (or fail) to learn is to think of ML models the same way as we think of teaching others: we may not be aware of how they are reaching a conclusion, yet if they consistently reach one, it may be assumed their process is consistently reaching appropriate results (hence a low error or mistake rate). If students, however, consistently gets good grades in Test A, yet gets a statistically significant lower grade in Test B of the same content, it may be inferred that the student has not learned the actual content of the test, but rather its non-generalizable structure---this is called \textit{overfitting} in ML \cite{overfitting2004, aima2021} (refer to \cref{fig:overfitting}). The notion of a student learning will henceforth be used, given the analogy's robustness and ability to capture well all the necessary concepts to be outlined in this paper. Training a ML algorithm, therefore, boils down to adapting teaching methods in order to conform to the best way students (models) learn.
 
-Simplifying the calculation to a one-variable linear equation regression, there are two adjustable parameters: slope and $y$-intercept, and one output---the error. \cref{fig:training_evolution} demonstrates the evolution of a regression model as a ``descent'' into the valley. The valley in and of itself represents the optimal combination of parameters $m$ and $b$ to best fit the data.
+Simplifying the calculation to a one-variable linear equation regression, there are two adjustable parameters: slope and $y$-intercept, and one output---the error. \cref{fig:training_evolution} demonstrates the evolution of a regression model as a ``descent'' into a \textit{global minima}. The valley in and of itself represents the optimal combination of parameters $m$ and $b$ to best fit the data and minimize loss.
 
 \begin{figure}[htbp]
     \centering
@@ -65,9 +65,9 @@ Simplifying the calculation to a one-variable linear equation regression, there 
     \label{fig:training_evolution}
 \end{figure}
 
-There are some points that have to be cleared up prior to delving deeper, though: (i) this is a simplified model. It is clear to see what the answer is, but rather than two dimensions, current AI models such are already going into the trillions of parameters (i.e.\ dimensions); (ii) the error never, in a statistical scenario, reaches 0 due to sampling and data variability, and (iii) a valley may only be a \textit{local minima}, not necessarily the \textit{global} minima. The task in question is to minimize the chances of \textbf{not} reaching the optimal parameters.
+There are some points that have to be cleared up prior to delving deeper, though: (i) \cref{fig:training_evolution} is a simplified model. It is clear to see what the answer is, but rather than two dimensions, current AI models such are already going into the trillions of parameters (i.e.\ dimensions); (ii) the error never, in a statistical scenario, reaches 0 due to sampling and data variability, and (iii) a valley may only be a \textit{local} minima, not necessarily the global minima. The task in question is to minimize the chances of \textbf{not} reaching the optimal parameters.
 
-With the scalar value from the \textit{objective function} (OF), one may understand that the focus is to minimize it. This is where backpropagation comes in. By analyzing how much changing one parameter affects it and its following neurons up to the final output layer through Calculus' \textit{Chain Rule}, a model is able to grasp how tuning different parameters evolves the \textbf{current model state} on the paraboloid shape provided by \cref{fig:training_evolution}'s loss lanscape, yet in a much higher-dimensional space.
+With the scalar value from the \textit{objective function} (OF), the \textit{loss}, one may understand that the focus is to minimize it. This is where backpropagation comes in. By analyzing how much changing one parameter affects it and its following neurons up to the final output layer through Calculus' \textit{Chain Rule}, a model is able to grasp how tuning different parameters evolves the \textbf{current model state} on the paraboloid shape provided by \cref{fig:training_evolution}'s loss lanscape, yet in a much higher-dimensional space.
 
 It is additionally relevant to note that the evolution of the OF with respect to model training generally follows that of a decaying exponential function \eqref{eq:decay_function}
 
@@ -109,7 +109,7 @@ where $\theta$ is the set of model parameters, $t$ is the epoch number (at what 
 \section{Related Work} \label {related}
 
 \subsection{Other methodologies employed}
-All but one of the top 25 best image classifier models for at the CIFAR-100 dataset (90\% accuracy and up) showed use of ``extra training data'' \cite{SOTApwcIC}. Given the focus of this paper is to (i) provide means of reduced energy usage and (ii) improve robustness, this is a great source of information, notably due to the availability of thorough methodologies and code repositories.
+All but one of the top 25 best image classifier models for at the CIFAR-100 dataset \cite{cifar100} (90\% accuracy and up) showed use of ``extra training data'' \cite{SOTApwcIC}. Given the focus of this paper is to (i) provide means of reduced energy usage and (ii) improve robustness, this is a great source of information, notably due to the availability of thorough methodologies and code repositories.
 
 \subsection{Other fields}
 
@@ -173,10 +173,10 @@ All analyses will be performed equally on all models, where the following are he
 
 \begin{enumerate}
     \item Learning rate: $\eta=0.001$
-    \item Activation function: ReLu\footnote{\textit{Rectified Linear Unit}, a popular NN activation function. $\text{ReLU}(\mathbf{z}) \coloneqq \max(0, \mathbf{z})$.}
+    \item Activation function: ReLU\footnote{\textit{Rectified Linear Unit}, a popular NN activation function. $\text{ReLU}(\mathbf{z}) \coloneqq \max(0, \mathbf{z})$ for an input vector $\mathbf{z}$.}
     \item Loss function: Cross-entropy
-    \item GPU: NVIDIA A100 80GB\footnote{Card will be run on \href{vast.ai}{\texttt{vast.ai}}, using the same provider for all runs for consistency.}
-    \item Dataset: ImageNet and CIFAR-\{10, 100\}\footnote{Common image classification datasets consisting of thousands of images for both training and testing.}
+    \item GPU: NVIDIA A100 80GB\footnote{Card will be run on \href{https://vast.ai}{\texttt{vast.ai}}, using the same provider for all runs for consistency.}
+    \item Dataset: ImageNet \cite{imagenet}, CIFAR-10 \cite{cifar10}, and CIFAR-100 \cite{cifar100, krizhevsky2009}\footnote{Common image classification datasets consisting of thousands of images for both training and testing.}
 \end{enumerate}
 
 A couple parameters are relative to each configuration---following a general guide---such as the \textit{model stop}, which will depend on the average initial learning rate on that specific configuration.
@@ -208,7 +208,7 @@ Hyperparameters were chosen mainly on literary review and state-of-the-art model
 \section{Resources} \label{resources}
 
 \subsection{Code samples}
-All code utilized in this paper are available in \href{github.com}{this GitHub repo}.\footnote{Not yet available as of yet.}
+All code utilized in this paper are available in \href{https://github.com/smgabardo/CV_Efficiency_MetaRobustness}{this GitHub repo}.\footnote{Not complete as of yet.}
 
 \subsection{Further reading}
 
